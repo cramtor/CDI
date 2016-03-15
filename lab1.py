@@ -7,7 +7,7 @@ clean_text fuction
 '''
 import unicodedata
 
-total = 0
+total = 0.00000000000000000000
 def clean_text(txt):
 	txt = txt.lower()
 	txt = txt.translate(None, "\"\'()[]{}?.!/;:,&%/$*^+-_")	
@@ -60,10 +60,14 @@ def prob_of(num_lett):
 '''
 Entropy
 '''
-from math import log2 
+def log2( x ):
+     return math.log( x ) / math.log( 2 )
+
+def ent_h1(w):
+	prb = prob_of(letterCount[w])
+	return prb*(log2(1/prb))
 
 def entropy(W):
-	#operation = 
 	global letterCount
 	summatory = 0;
 	for n in letterCount:
@@ -71,7 +75,13 @@ def entropy(W):
 		summatory += prb*(log2(1/prb))
 	return summatory
 
-
+def join_entropy(W):
+	global letterCount
+	summatory = 0;
+	for n in letterCount:
+		prb = prob_of(letterCount[n])
+		summatory += prb*(log2(1/prb))
+	return summatory
 
 '''
 MAIN
@@ -82,11 +92,14 @@ with open('22884-8.txt', 'rw') as myfiles:
     i = clean_text(i)
     i = rm_pagebreak(i)
     i = rep_decor(i)
+    rdm = rd.choice(i)
     frq = getLetterCount(i)
     ent = entropy(i)
-    print rd_sample(i)
-    print total
-    print ent
+    f = ent_h1(rdm)
+    print total #Nuber of letters of a file.txt
+    print ent #Entropy of this text
+    print rdm
+    print f
     
 
 
